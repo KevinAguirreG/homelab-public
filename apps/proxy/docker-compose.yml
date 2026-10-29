@@ -1,0 +1,29 @@
+services:
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - proxy
+    restart: unless-stopped
+
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    networks:
+      - proxy
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  caddy-data:
+  caddy-config:
